@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29123.88
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RTL.TVMazeDemo.Api", "RTL.TVMazeDemo.Api\RTL.TVMazeDemo.Api.csproj", "{8B46E2FF-13D6-411D-9268-7D5D88AFA236}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RTL.TVMaze.Dal.EFCore", "RTL.TVMaze.Dal.EFCore\RTL.TVMaze.Dal.EFCore.csproj", "{5DBD2C05-C244-4398-A76A-950EB7EAD90D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RTL.TVMaze.Generic", "RTL.TVMaze.Generic\RTL.TVMaze.Generic.csproj", "{CEBBD11F-6796-4A4C-A029-57E8D9B63909}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RTL.TVMaze.BLL", "RTL.TVMaze.BLL\RTL.TVMaze.BLL.csproj", "{1B9B73D3-8B8E-4039-B4F8-5E29B4DD8812}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8B46E2FF-13D6-411D-9268-7D5D88AFA236}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B46E2FF-13D6-411D-9268-7D5D88AFA236}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B46E2FF-13D6-411D-9268-7D5D88AFA236}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B46E2FF-13D6-411D-9268-7D5D88AFA236}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DBD2C05-C244-4398-A76A-950EB7EAD90D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DBD2C05-C244-4398-A76A-950EB7EAD90D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DBD2C05-C244-4398-A76A-950EB7EAD90D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DBD2C05-C244-4398-A76A-950EB7EAD90D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEBBD11F-6796-4A4C-A029-57E8D9B63909}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEBBD11F-6796-4A4C-A029-57E8D9B63909}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEBBD11F-6796-4A4C-A029-57E8D9B63909}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEBBD11F-6796-4A4C-A029-57E8D9B63909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B9B73D3-8B8E-4039-B4F8-5E29B4DD8812}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B9B73D3-8B8E-4039-B4F8-5E29B4DD8812}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B9B73D3-8B8E-4039-B4F8-5E29B4DD8812}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B9B73D3-8B8E-4039-B4F8-5E29B4DD8812}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {281A56D1-C930-4373-AE36-5C2C7FEC7DE2}
+	EndGlobalSection
+EndGlobal
