@@ -14,6 +14,6 @@ This is a demo project for RTL, it Scrapes data from the TVMaze  Api http://www.
 <p>This project is D.D.D inspired, it uses repository pattern and layered architecture.</p>
 <p>- Data Access Layer (DAL): Provides database access and manipulation by implementing BLL abstractions</p>
 <p>- Business logic layer (BLL): Handles business logic and provides abstractions for DAL</p>
-<p>- Data layer (Generic): provides generic types like entities to be used by other layers</p>
+<p>- Data layer (Generic): provides types like entities to be used by other layers</p>
 <p>These layers are then brought together in the Api Web Application project.</p>
 
