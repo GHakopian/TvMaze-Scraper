@@ -13,7 +13,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace RTL.TVMazeDemo.Api
+namespace RTL.TVMaze.Api
 {
     public class Startup
     {

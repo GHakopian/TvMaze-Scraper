@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace RTL.TVMazeDemo.Api
+namespace RTL.TVMaze.Api
 {
     public class Program
     {

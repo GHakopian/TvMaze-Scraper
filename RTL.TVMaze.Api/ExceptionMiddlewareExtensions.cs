@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RTL.TVMazeDemo.Api
+namespace RTL.TVMaze.Api
 {
     /// <summary>
     /// Helper middleware for catching app wide exceptions

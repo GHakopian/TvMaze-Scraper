@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using RTL.TVMaze.BLL.Models;
 using RTL.TVMaze.BLL.Services;
 
-namespace RTL.TVMazeDemo.Api.Controllers
+namespace RTL.TVMaze.Api.Controllers
 {
     /// <summary>
     /// Handles requests for shows
