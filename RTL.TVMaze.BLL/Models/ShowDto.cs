@@ -19,7 +19,7 @@ namespace RTL.TVMaze.BLL.Models
                     Cast.Add(new CastPersonDto(castCredit.Person));
                 }
             }
-            Cast = Cast.OrderBy(c => c.Birthday).ToList();
+            Cast = Cast.OrderByDescending(c => c.Birthday).ToList();
         }
 
         public ShowDto(){}
