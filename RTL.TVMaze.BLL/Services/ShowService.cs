@@ -48,8 +48,7 @@ namespace RTL.TVMaze.BLL.Services
                 resultList.Add(new ShowDto(show));
             }
 
-            // saving affected rows in the foreach above, we do this here to avoid multi threading issues with dbContext
-            var affectedRows = await DatabaseRepository.SaveChanges();
+            await DatabaseRepository.SaveChanges();
 
             return resultList;
         }
