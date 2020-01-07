@@ -16,7 +16,6 @@ namespace RTL.TVMaze.BLL.Services
         private ICastCreditRepository CastCreditRepository;
         private IPersonRepository PersonRepository;
         private IDatabaseRepository DatabaseRepository;
-        private IHttpClientFactory ClientFactory;
         private HttpClient HttpClient;
 
         public ShowService(IShowRepository showRepository,
