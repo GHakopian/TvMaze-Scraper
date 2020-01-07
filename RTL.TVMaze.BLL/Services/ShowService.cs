@@ -17,6 +17,7 @@ namespace RTL.TVMaze.BLL.Services
         private IPersonRepository PersonRepository;
         private IDatabaseRepository DatabaseRepository;
         private IHttpClientFactory ClientFactory;
+        private HttpClient HttpClient;
 
         public ShowService(IShowRepository showRepository,
             IHttpClientFactory clientFactory,
@@ -25,7 +26,7 @@ namespace RTL.TVMaze.BLL.Services
             IDatabaseRepository databaseRepository)
         {
             ShowRepository = showRepository;
-            ClientFactory = clientFactory;
+            HttpClient = clientFactory.CreateClient();
             DatabaseRepository = databaseRepository;
             CastCreditRepository = castCreditRepository;
             PersonRepository = personRepository;
@@ -60,51 +61,48 @@ namespace RTL.TVMaze.BLL.Services
             var request = new HttpRequestMessage(HttpMethod.Get, "http://api.tvmaze.com/shows/" + showId + "/cast");
             request.Headers.Add("Accept", "application/json");
 
-            using (var client = ClientFactory.CreateClient())
+            var response = await HttpClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
             {
-                var response = await client.SendAsync(request);
+                string json = await response.Content.ReadAsStringAsync();
+                var castDtoList = JsonConvert.DeserializeObject<IEnumerable<CastCreditDto>>(json);
 
-                if (response.IsSuccessStatusCode)
+                var castList = new List<CastCredit>();
+
+                foreach (var castCreditDto in castDtoList)
                 {
-                    string json = await response.Content.ReadAsStringAsync();
-                    var castDtoList = JsonConvert.DeserializeObject<IEnumerable<CastCreditDto>>(json);
+                    if (castCreditDto.Person == null) { continue; } // skip if there is no person
 
-                    var castList = new List<CastCredit>();
-
-                    foreach (var castCreditDto in castDtoList)
+                    var castCredit = new CastCredit
                     {
-                        if (castCreditDto.Person == null) { continue; } // skip if there is no person
+                        ShowId = showId,
+                        PersonId = castCreditDto.Person.Id,
+                        Person = new Person
+                        {
+                            Id = castCreditDto.Person.Id,
+                            Birthday = castCreditDto.Person.Birthday,
+                            Name = castCreditDto.Person.Name,
+                        }
+                    };
 
-                        var castCredit = new CastCredit
+                    // adding this as a new instance to avoid tracking by entity framework
+                    await CastCreditRepository.AddCastCredit(
+                        new CastCredit
                         {
                             ShowId = showId,
                             PersonId = castCreditDto.Person.Id,
-                            Person = new Person
-                            {
-                                Id = castCreditDto.Person.Id,
-                                Birthday = castCreditDto.Person.Birthday,
-                                Name = castCreditDto.Person.Name,
-                            }
-                        };
+                        });
 
-                        // adding this as a new instance to avoid tracking by entity framework
-                        await CastCreditRepository.AddCastCredit(
-                            new CastCredit
-                            {
-                                ShowId = showId,
-                                PersonId = castCreditDto.Person.Id,
-                            });
-
-                        var personExists = await PersonRepository.PersonExists(castCredit.PersonId);
-                        if (!personExists)
-                        {
-                            await PersonRepository.AddPerson(castCredit.Person);
-                        }
-                        castList.Add(castCredit);
+                    var personExists = await PersonRepository.PersonExists(castCredit.PersonId);
+                    if (!personExists)
+                    {
+                        await PersonRepository.AddPerson(castCredit.Person);
                     }
-
-                    return castList;
+                    castList.Add(castCredit);
                 }
+
+                return castList;
             }
 
             // something went wrong at this point, returning empty list
@@ -113,37 +111,34 @@ namespace RTL.TVMaze.BLL.Services
 
         public async Task<bool> SyncShowData()
         {
-            using (var client = ClientFactory.CreateClient())
+            // we get the highest id in our db to calculate a starting point
+            var highestShowId = await ShowRepository.GetHighestShowId();
+            var done = false;
+            double pageNumber = (double)(highestShowId) / 250;
+            // note, the documentation of the TVMaze Api tells us to floor highestShowId) / 250
+            // but this will give us the last page number we requested, what we want is the next page number to request so we use ceiling
+            int pageNum = highestShowId < 1 ? 0 : (int)(Math.Ceiling(pageNumber));
+            while (!done)
             {
-                // we get the highest id in our db to calculate a starting point
-                var highestShowId = await ShowRepository.GetHighestShowId();
-                var done = false;
-                double pageNumber = (double)(highestShowId) / 250;
-                // note, the documentation of the TVMaze Api tells us to floor highestShowId) / 250
-                // but this will give us the last page number we requested, what we want is the next page number to request so we use ceiling
-                int pageNum = highestShowId < 1 ? 0 : (int)(Math.Ceiling(pageNumber));
-                while (!done)
+                var request = new HttpRequestMessage(HttpMethod.Get, "http://api.tvmaze.com/shows?page=" + pageNum);
+                request.Headers.Add("Accept", "application/json");
+
+                var response = await HttpClient.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    var request = new HttpRequestMessage(HttpMethod.Get, "http://api.tvmaze.com/shows?page=" + pageNum);
-                    request.Headers.Add("Accept", "application/json");
-
-                    var response = await client.SendAsync(request);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string json = await response.Content.ReadAsStringAsync();
-                        var shows = JsonConvert.DeserializeObject<IEnumerable<Show>>(json);
-                        await ShowRepository.AddShows(shows);
-                    }
-                    else
-                    {
-                        done = true;
-                    }
-                    pageNum++;
+                    string json = await response.Content.ReadAsStringAsync();
+                    var shows = JsonConvert.DeserializeObject<IEnumerable<Show>>(json);
+                    await ShowRepository.AddShows(shows);
                 }
-                var affectedRows = await DatabaseRepository.SaveChanges();
-                return affectedRows > 0;
+                else
+                {
+                    done = true;
+                }
+                pageNum++;
             }
+            var affectedRows = await DatabaseRepository.SaveChanges();
+            return affectedRows > 0;
         }
     }
 }
